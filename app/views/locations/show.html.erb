@@ -15,7 +15,31 @@
   <%= @location.longitude %>
 </p>
 
-<%= image_tag "http://maps.google.com/maps/api/staticmap?size=450x300&sensor=false&zoom=16&markers=#{@location.latitude}%2C#{@location.longitude}" %>
+<!-- <%= image_tag "http://maps.google.com/maps/api/staticmap?size=450x300&sensor=false&zoom=16&markers=#{@location.latitude}%2C#{@location.longitude}" %> -->
+
+<div style='width: 800px;'>
+  <div id="map" style='width: 800px; height: 400px;'></div>
+</div>
+
+<script>
+handler = Gmaps.build('Google');
+handler.buildMap({ provider: {}, internal: {id: 'map'}}, function(){
+markers = handler.addMarkers([
+  {
+    "lat": <%= @location.latitude %>,
+    "lng": <%= @location.longitude %>,
+    // "picture": {
+    //   "url": "http://people.mozilla.com/~faaborg/files/shiretoko/firefoxIcon/firefox-32.png",
+    //   "width":  32,
+    //   "height": 32
+    // },
+    "infowindow": '<%= @location.address %>'
+  }
+]);
+handler.bounds.extendWith(markers);
+handler.fitMapToBounds();
+});
+</script>
 
 <h3>Nearby locations</h3>
 <ul>
